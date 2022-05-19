@@ -1,6 +1,6 @@
 class Configs {
 
-    public static readonly host = 'https://crud-products-app.herokuapp.com';
+    public static readonly host = 'https://catalogue-products-app.herokuapp.com';
 
 }
 
