@@ -1,7 +1,7 @@
 import {useNavigate} from "react-router-dom";
-import {useContext} from "react";
+import {useCallback, useContext} from "react";
 
-import ProductsService, {Product} from "../services/products";
+import ProductsService from "../services/products";
 
 import WindowContext from "../contexts/window";
 
@@ -12,31 +12,29 @@ const useProductEdit = () => {
 
     const { setWindow } = useContext(WindowContext);
 
-    const showWindow = (product: Product) => {
+    return useCallback((id: string) => {
         const closeWindow = () => {
             navigate('/');
             setWindow();
         }
 
-        setWindow({
-            title: 'Modificar Producto',
-            children: <ProductEditor
-                product={product}
-                onCancel={closeWindow}
-                onSave={async (data) => {
-                    await ProductsService.Update(product.id, data);
-                    closeWindow();
-                }}
-            />,
-            onClose: closeWindow
-        })
-    }
-
-    return (id: string) => {
         ProductsService.Find(id)
-            .then(showWindow)
+            .then(product => {
+                setWindow({
+                    title: 'Modificar Producto',
+                    children: <ProductEditor
+                        product={product}
+                        onCancel={closeWindow}
+                        onSave={async (data) => {
+                            await ProductsService.Update(product.id, data);
+                            closeWindow();
+                        }}
+                    />,
+                    onClose: closeWindow
+                })
+            })
             .catch(console.error)
-    };
+    }, [navigate, setWindow])
 }
 
 export default useProductEdit;

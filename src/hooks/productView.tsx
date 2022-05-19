@@ -1,7 +1,7 @@
-import {useContext} from "react";
+import {useCallback, useContext} from "react";
 import {useNavigate} from "react-router-dom";
 
-import ProductsService, {Product} from "../services/products";
+import ProductsService from "../services/products";
 
 import WindowContext from "../contexts/window";
 
@@ -12,20 +12,22 @@ const useProductView = () => {
 
     const { setWindow } = useContext(WindowContext);
 
-    const showWindow = (product: Product) => {
+    return useCallback((id: string) => {
         const closeWindow = () => {
             navigate('/');
             setWindow();
         }
 
-        setWindow({
-            title: 'Info Producto',
-            children: <ProductInfo product={product} />,
-            onClose: closeWindow
-        })
-    }
-
-    return (id: string) => { ProductsService.Find(id).then(showWindow) };
+        ProductsService.Find(id)
+            .then(product => {
+                setWindow({
+                    title: 'Info Producto',
+                    children: <ProductInfo product={product} />,
+                    onClose: closeWindow
+                })
+            })
+            .catch(console.error)
+    }, [navigate, setWindow]);
 }
 
 export default useProductView;

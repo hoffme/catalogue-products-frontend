@@ -35,7 +35,7 @@ const InputImage = (props: Props) => {
     }
 
     return <div className={style.container}>
-        <img src={loaded ? `http://localhost:4000${props.value}` : UploadSrc} alt={''} />
+        <img src={loaded ? props.value : UploadSrc} alt={''} />
         <PrimaryButton onClickAsync={handlerUpload} className={style.button}>
             { loaded ? 'Eliminar' : 'Subir' }
         </PrimaryButton>

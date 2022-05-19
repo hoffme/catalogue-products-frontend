@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 
-import Configs from "../../../../services/configs";
 import {Product} from "../../../../services/products";
 
 import useJoinClassNames from "../../../../hooks/className";
@@ -24,7 +23,7 @@ const ProductRow = (props: Props) => {
         <Link to={`info/${props.product.id}`}>
             {
                 props.product.image && props.product.image.length > 0 &&
-                <img src={Configs.host + props.product.image} alt={''} />
+                <img src={props.product.image} alt={''} />
             }
             <div className={style.meta}>
                 <label className={style.title}>

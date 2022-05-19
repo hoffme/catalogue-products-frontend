@@ -1,4 +1,3 @@
-import Configs from "../../../../services/configs";
 import {Product} from "../../../../services/products";
 
 import FieldHeader from "../../../commons/fields/header";
@@ -14,7 +13,7 @@ const ProductInfo = (props: Props) => {
     return <div className={style.container}>
         {
             props.product.image.length > 0 &&
-                <img className={style.img} src={Configs.host + props.product.image} alt={''} />
+                <img className={style.img} src={props.product.image} alt={''} />
         }
         <div className={style.data}>
             <div className={style.field}>

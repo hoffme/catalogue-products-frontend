@@ -1,5 +1,5 @@
 import {useNavigate} from "react-router-dom";
-import {useContext} from "react";
+import {useCallback, useContext} from "react";
 
 import ProductsService from "../services/products";
 
@@ -12,7 +12,7 @@ const useProductCreate = () => {
 
     const { setWindow } = useContext(WindowContext);
 
-    return () => {
+    return useCallback(() => {
         const closeWindow = () => {
             navigate('/');
             setWindow();
@@ -29,7 +29,7 @@ const useProductCreate = () => {
             />,
             onClose: closeWindow
         })
-    };
+    }, [navigate, setWindow]);
 }
 
 export default useProductCreate;
