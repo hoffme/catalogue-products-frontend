@@ -1,5 +1,5 @@
 import Request from "./request";
-import EventsManager from "./realtime/manager";
+import EventsManager from "./realtime";
 
 interface ProductFilter {
     id?: string[]

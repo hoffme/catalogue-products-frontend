@@ -11,7 +11,7 @@ interface Image {
 class ImagesService {
 
     public static async Get(id: string): Promise<string> {
-        const response = await fetch(`${Request.host}images/${id}`);
+        const response = await Request.fetchRaw({ uri: `images/${id}` });
         const blob = await response.blob();
         return URL.createObjectURL(blob);
     }
@@ -20,14 +20,13 @@ class ImagesService {
         const body = new FormData();
         body.append("image", file);
 
-        const response = await fetch(`${Request.host}/api/images`, {
+        const response = await Request.fetchRaw({
+            uri: 'images/',
             method: 'POST',
             body
         })
-        const data = await response.json();
-        if (data.error) throw new Error(data.error);
 
-        return data.result;
+        return await Request.apiResponse(response);
     }
 
 }

@@ -1,16 +1,17 @@
-import {FormEvent, useState} from "react";
+import {useState} from "react";
 
 import {ProductFilter} from "../../../../services/products";
 
 import useJoinClassNames from "../../../../hooks/className";
+import useProductFilter from "../../../../hooks/productsFilter";
 
 import Surface from "../../../commons/surface";
-import {PrimaryButton, SecondaryButton} from "../../../commons/buttons/main";
+import {SecondaryButton} from "../../../commons/buttons/main";
 import {InputNumber, InputText} from "../../../commons/fields/input";
 import FieldHeader from "../../../commons/fields/header";
+import Select from "../../../commons/fields/select";
 
 import style from './style.module.scss';
-import Select from "../../../commons/fields/select";
 
 interface Props {
     className?: string
@@ -20,15 +21,20 @@ interface Props {
 
 const ProductsFilter = (props: Props) => {
     const [extended, setExtended] = useState(false);
-    const [filter, setFilter] = useState<ProductFilter>(props.filter);
+    const {
+        data,
+        setQuery,
+        setOrderAsc,
+        setOrderBy,
+        setStockMax,
+        setStockMin,
+        setPriceMax,
+        setPriceMin,
+    } = useProductFilter();
 
     const containerClassName = useJoinClassNames(style.container, props.className);
 
-    const submit = (e: FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-
-        props.onSearch(filter);
-    }
+    const submit = () => props.onSearch(data);
 
     return <Surface className={containerClassName}>
         <div className={style.header}>
@@ -36,14 +42,11 @@ const ProductsFilter = (props: Props) => {
                 <FieldHeader title={'Busqueda por texto'} />
                 <InputText
                     placeholder={'Buscar'}
-                    value={filter.query || ''}
-                    onChange={query => setFilter({ ...filter, query })}
+                    value={data.query || ''}
+                    onChange={setQuery}
                 />
             </div>
-            <SecondaryButton onClick={e => {
-                e.preventDefault();
-                setExtended(!extended);
-            }}>
+            <SecondaryButton onClick={() => setExtended(!extended)}>
                 { extended ? 'Reducir' : 'Extender' }
             </SecondaryButton>
         </div>
@@ -52,30 +55,34 @@ const ProductsFilter = (props: Props) => {
                 <div className={style.field}>
                     <FieldHeader title={'Stock'} />
                     <InputNumber
-                        value={filter.stockMin || 0}
-                        onChange={stockMin => setFilter({ ...filter, stockMin })}
+                        value={data.stockMin !== undefined ? data.stockMin : NaN}
+                        onChange={setStockMin}
+                        placeholder={'Min'}
                     />
                     <InputNumber
-                        value={filter.stockMax || 0}
-                        onChange={stockMax => setFilter({ ...filter, stockMax })}
+                        value={data.stockMax !== undefined ? data.stockMax : NaN}
+                        onChange={setStockMax}
+                        placeholder={'Max'}
                     />
                 </div>
                 <div className={style.field}>
                     <FieldHeader title={'Precio'} />
                     <InputNumber
-                        value={filter.priceMin || 0}
-                        onChange={priceMin => setFilter({ ...filter, priceMin })}
+                        value={data.priceMin !== undefined ? data.priceMin : NaN}
+                        onChange={setPriceMin}
+                        placeholder={'Min'}
                     />
                     <InputNumber
-                        value={filter.priceMax || 0}
-                        onChange={priceMax => setFilter({ ...filter, priceMax })}
+                        value={data.priceMax !== undefined ? data.priceMax : NaN}
+                        onChange={setPriceMax}
+                        placeholder={'Max'}
                     />
                 </div>
                 <div className={style.field}>
                     <FieldHeader title={'Orden'} />
                     <Select
-                        value={filter.orderBy}
-                        onChange={e => setFilter({ ...filter, orderBy: e.currentTarget.value as any })}
+                        value={data.orderBy}
+                        onChange={e => setOrderBy(e.currentTarget.value as any)}
                     >
                         <option value={'name'}>Nombre</option>
                         <option value={'price'}>Precio</option>
@@ -84,8 +91,8 @@ const ProductsFilter = (props: Props) => {
                         <option value={'updatedAt'}>Fecha de Actualizacion</option>
                     </Select>
                     <Select
-                        value={filter.orderAsc ? '1' : '2'}
-                        onChange={e => setFilter({ ...filter, orderAsc: e.currentTarget.value === '1' })}
+                        value={data.orderAsc ? '1' : '2'}
+                        onChange={e => setOrderAsc(e.currentTarget.value === '1' )}
                     >
                         <option value={'1'}>Ascendente</option>
                         <option value={'2'}>Descendente</option>
@@ -93,7 +100,7 @@ const ProductsFilter = (props: Props) => {
                 </div>
             </div>
         }
-        <SecondaryButton className={style.button}>
+        <SecondaryButton className={style.button} onClick={submit}>
             Buscar
         </SecondaryButton>
     </Surface>

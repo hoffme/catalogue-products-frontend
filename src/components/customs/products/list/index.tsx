@@ -16,6 +16,10 @@ const ProductsList = (props: Props) => {
 
     return <div className={containerClassName}>
         {
+            props.products.length === 0 &&
+                <label className={style.notFound}>No hay productos</label>
+        }
+        {
             props.products.map((product, key) => (
                 <ProductRow
                     className={style.row}

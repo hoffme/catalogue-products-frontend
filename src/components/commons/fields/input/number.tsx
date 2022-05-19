@@ -17,7 +17,7 @@ interface Props {
 const InputNumber = (props: Props) => {
     return <Input
         type={'number'}
-        value={props.value}
+        value={isNaN(props.value) ? '' : props.value}
         onChange={e => props.onChange(parseFloat(e.currentTarget.value))}
         placeholder={props.placeholder}
         disabled={props.disabled}

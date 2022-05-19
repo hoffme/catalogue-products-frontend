@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 
-import EventsManager from "./services/realtime/manager";
+import EventsManager from "./services/realtime";
 
 import {WindowProvider} from "./contexts/window";
 

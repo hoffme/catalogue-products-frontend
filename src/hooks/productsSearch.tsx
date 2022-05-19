@@ -1,21 +1,8 @@
 import {useCallback, useEffect, useState} from "react";
 
-import ProductsService, {Product, ProductFilter} from "../../../../services/products";
+import ProductsService, {Product, ProductFilter} from "../services/products";
 
-import useJoinClassNames from "../../../../hooks/className";
-
-import ProductsFilter from "../filter";
-import ProductsList from "../list";
-import NewProductButton from "../buttons/new";
-import Loading from "../../../commons/loading";
-
-import style from './style.module.scss';
-
-interface Props {
-    className?: string
-}
-
-const ProductsContainer = (props: Props) => {
+const useProductSearch = (): [boolean, Product[], ProductFilter, (filter: ProductFilter) => void] => {
     const [filter, setFilter] = useState<ProductFilter>({});
     const [loading, setLoading] = useState(false);
     const [results, setResults] = useState<Product[]>([]);
@@ -29,7 +16,7 @@ const ProductsContainer = (props: Props) => {
             .finally(() => setLoading(false));
     }, [filter])
 
-    useEffect(() => { search() }, [filter])
+    useEffect(() => { search() }, [search, filter])
 
     useEffect(() => {
         const cb = () => { search() }
@@ -45,15 +32,7 @@ const ProductsContainer = (props: Props) => {
         }
     }, [search])
 
-    const containerClassName = useJoinClassNames(style.container, props.className);
-
-    return <div className={containerClassName}>
-        <NewProductButton className={style.newProductButton} />
-        <ProductsFilter filter={filter} onSearch={setFilter} />
-        {
-            loading ? <Loading /> : <ProductsList products={results} />
-        }
-    </div>
+    return [loading, results, filter, setFilter];
 }
 
-export default ProductsContainer;
+export default useProductSearch;
