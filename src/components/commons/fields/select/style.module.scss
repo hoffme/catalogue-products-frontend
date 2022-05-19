@@ -1,0 +1,20 @@
+.container {
+  padding: 0.5rem;
+  background-color: transparent;
+  border: 1px solid var(--surface-shadow-color);
+  border-radius: 0.5rem;
+  color: var(--surface-text-secondary-color);
+
+  option {
+    background-color: var(--surface-background-color);
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid var(--surface-text-tertiary-color);
+  }
+
+  &::placeholder {
+    color: var(--surface-text-tertiary-color);
+  }
+}

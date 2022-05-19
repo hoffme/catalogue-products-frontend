@@ -1,0 +1,18 @@
+.container {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  background-color: var(--surface-background-color);
+  box-shadow: 0 0 0.25rem var(--surface-shadow-color);
+  color: var(--surface-text-secondary-color);
+
+  &.primary {
+    border-radius: 0.5rem;
+    background-color: var(--surface-highlight-background-color);
+    box-shadow: 0 0 0.25rem var(--surface-highlight-shadow-color);
+    color: var(--surface-highlight-text-secondary-color);
+  }
+
+  &:hover {
+    box-shadow: 0 0 0.5rem var(--surface-shadow-color);
+  }
+}
